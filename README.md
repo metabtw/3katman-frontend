@@ -1,39 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3Katman Digital - Yazılım Ajansı Web Sitesi
 
-## Getting Started
+Modern, şık ve kullanıcı dostu bir yazılım ajansı web sitesi.  
+Hizmet tanıtımı, portfolyo gösterimi ve müşteri başvuruları için tasarlandı.  
+Türkçe dilinde, SEO ve hız optimizasyonuna uygun şekilde geliştirildi.
 
-First, run the development server:
+---
 
+## 🚀 Proje Hedefi
+
+- Yazılım ajansı olarak hizmetlerimizi tanıtmak
+- Önceki projeleri sergileyerek güven oluşturmak
+- Ziyaretçilerin kolayca iletişime geçmesini sağlamak
+- Müşteri başvurularını alıp yönetebilmek
+
+---
+
+## 📄 Sayfa Yapısı
+
+- 🏠 Anasayfa  
+- 👥 Hakkımızda  
+- 🛠️ Hizmetler  
+- 📂 Portfolyo  
+- ❓ SSS  
+- 📞 İletişim  
+- 🔒 Admin Paneli (Giriş ile erişim)  
+
+> Not: “Blog” ve “Teklif Al” sayfaları bu sürümde dahil edilmemiştir.
+
+---
+
+## 🎨 Tasarım ve Marka Renkleri
+
+Modern ve temiz tasarım. Renk paleti:
+
+#295652 | #307869 | #38b97e | #56df9c | #abf0d6
+
+Logo: PNG ve JPEG formatlarında mevcut
+
+---
+
+## 🧱 Kullanılan Teknolojiler
+
+### Frontend
+- HTML5 / CSS3 / JavaScript
+- Next.js (Component yapısı ve yönlendirme için)
+- Mobil uyumlu (responsive) tasarım
+- SEO & hız optimizasyonu
+
+### Backend
+- C# ile yazılmış RESTful API
+- Kullanıcı başvurusu gönderme ve veri yönetimi
+- Admin & editör rolleri için yetkilendirme
+
+### Veritabanı
+- MySQL
+- Tablolar:
+  - `users`: Giriş yapan müşteriler
+  - `applications`: Müşteri başvuruları
+  - `projects`: Portfolyo içerikleri
+  - `admins`: Yönetici/editör hesapları
+
+---
+
+## 👥 Kullanıcı Rolleri
+
+- 👤 Ziyaretçi: Siteyi inceler, form doldurabilir
+- 👨‍💼 Müşteri: Giriş yapıp geçmiş başvurularını görebilir (isteğe bağlı)
+- 🛠️ Editör: İçerik yönetimi yapar
+- 🧑‍💻 Yönetici: Tüm panele erişim sağlar
+
+---
+
+## ⚙️ Kurulum
+
+### Geliştirici Ortamı (Yerel)
+
+**Frontend:**
 ```bash
+cd frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-Open http://localhost:3000 with your browser to see the result.
+Backend:
 
-You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
+Visual Studio ile açın
 
-This project uses next/font to automatically optimize and load Geist, a new font family for Vercel.
+appsettings.json içinde MySQL bağlantı bilgilerini düzenleyin
 
-Learn More
-To learn more about Next.js, take a look at the following resources:
+Uygulamayı çalıştırın
 
-Next.js Documentation - learn about Next.js features and API.
+Veritabanı:
 
-Learn Next.js - an interactive Next.js tutorial.
+MySQL kurulu olmalı
 
-You can check out the Next.js GitHub repository - your feedback and contributions are welcome!
+database.sql dosyasını içeri aktarın
 
-Deploy on Vercel
-The easiest way to deploy your Next.js app is to use the Vercel Platform from the creators of Next.js.
-
-Check out our Next.js deployment documentation for more details.
-
-shell
-
-### 🔄 Alternatif: Sadece GitHub’daki `README` içeriğini tutmak istersen:
-```md
-# 3katman-frontend
