@@ -25,8 +25,6 @@ Türkçe dilinde, SEO ve hız optimizasyonuna uygun şekilde geliştirildi.
 - 📞 İletişim  
 - 🔒 Admin Paneli (Giriş ile erişim)  
 
-> Not: “Blog” ve “Teklif Al” sayfaları bu sürümde dahil edilmemiştir.
-
 ---
 
 ## 🎨 Tasarım ve Marka Renkleri
