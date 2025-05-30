@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolyo Yönetimi | 3Katman Digital Admin</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <!--#include file="components/sidebar.html" -->
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <!-- Navbar -->
+      <nav class="admin-navbar" style="width:100%;background:var(--primary);padding:0.5rem 2rem;display:flex;gap:2rem;align-items:center;">
+        <a href="hizmetler.html" class="admin-nav-link" id="nav-hizmetler">Hizmetler</a>
+        <a href="portfolyo.html" class="admin-nav-link" id="nav-portfolyo">Portfolyo</a>
+        <a href="iletisim.html" class="admin-nav-link" id="nav-iletisim">İletişim Mesajları</a>
+      </nav>
+      <style>
+        .admin-navbar {
+          border-radius: 1.2rem 1.2rem 0 0;
+          margin-bottom: 0.5rem;
+        }
+        .admin-nav-link {
+          color: #fff;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 1.08rem;
+          padding: 0.5rem 1.2rem;
+          border-radius: 8px;
+          transition: background 0.2s;
+          letter-spacing: 0.01em;
+        }
+        .admin-nav-link.active, .admin-nav-link:hover {
+          background: var(--accent);
+          color: #fff;
+        }
+        @media (max-width: 600px) {
+          .admin-navbar {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.5rem 0.5rem;
+          }
+          .admin-nav-link {
+            width: 100%;
+            text-align: center;
+          }
+        }
+      </style>
+      <script>
+        // Aktif sayfa vurgusu
+        const path = window.location.pathname;
+        if(path.includes('hizmetler')) document.getElementById('nav-hizmetler').classList.add('active');
+        if(path.includes('portfolyo')) document.getElementById('nav-portfolyo').classList.add('active');
+        if(path.includes('iletisim')) document.getElementById('nav-iletisim').classList.add('active');
+      </script>
+      <!-- Header -->
+      <!--#include file="components/header.html" -->
+      <main class="admin-main">
+        <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:2rem;">Portfolyo</h1>
+        <!-- Proje Listesi Tablosu -->
+        <table class="table" id="projeTable">
+          <thead>
+            <tr>
+              <th>Proje Adı</th>
+              <th>Açıklama</th>
+              <th>Görsel</th>
+              <th>Kategori</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dummy veri ile doldurulacak -->
+          </tbody>
+        </table>
+        <!-- Yeni Proje Ekleme Formu -->
+        <form id="projeForm" style="margin-top:2rem;max-width:500px;">
+          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Yeni Proje Ekle</h2>
+          <input type="text" id="projeAdi" placeholder="Proje Adı" required />
+          <textarea id="projeAciklama" placeholder="Açıklama" required></textarea>
+          <input type="text" id="projeGorsel" placeholder="Görsel URL" required />
+          <input type="text" id="projeKategori" placeholder="Kategori" required />
+          <button type="submit">Ekle</button>
+        </form>
+      </main>
+    </div>
+  </div>
+  <script>
+    // Dummy proje verisi
+    let projeler = [
+      { adi: "Kurumsal Web", aciklama: "Kurumsal firma için modern web sitesi.", gorsel: "https://placehold.co/80x50", kategori: "Web" },
+      { adi: "Mobil Uygulama", aciklama: "iOS ve Android için native uygulama.", gorsel: "https://placehold.co/80x50/38b97e/fff?text=App", kategori: "Mobil" },
+      { adi: "E-Ticaret", aciklama: "Online satış platformu.", gorsel: "https://placehold.co/80x50/295652/fff?text=Shop", kategori: "E-Ticaret" }
+    ];
+    function renderProjeTable() {
+      const tbody = document.querySelector('#projeTable tbody');
+      tbody.innerHTML = '';
+      projeler.forEach((proje, i) => {
+        tbody.innerHTML += `
+          <tr>
+            <td><span style="font-weight:600;">${proje.adi}</span></td>
+            <td>${proje.aciklama}</td>
+            <td><img src="${proje.gorsel}" alt="görsel" style="width:80px;height:50px;object-fit:cover;border-radius:8px;box-shadow:0 1px 4px #29565222;" /></td>
+            <td>${proje.kategori}</td>
+            <td>
+              <button onclick="editProje(${i})" style="background:var(--accent);margin-right:0.5rem;">Düzenle</button>
+              <button onclick="deleteProje(${i})" style="background:#e53935;">Sil</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+    function deleteProje(i) {
+      if(confirm('Bu proje silinsin mi?')) {
+        projeler.splice(i, 1);
+        renderProjeTable();
+      }
+    }
+    function editProje(i) {
+      // Basit edit: formu doldur ve sil+ekle yap
+      const p = projeler[i];
+      document.getElementById('projeAdi').value = p.adi;
+      document.getElementById('projeAciklama').value = p.aciklama;
+      document.getElementById('projeGorsel').value = p.gorsel;
+      document.getElementById('projeKategori').value = p.kategori;
+      projeler.splice(i, 1);
+      renderProjeTable();
+    }
+    document.getElementById('projeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const adi = document.getElementById('projeAdi').value.trim();
+      const aciklama = document.getElementById('projeAciklama').value.trim();
+      const gorsel = document.getElementById('projeGorsel').value.trim();
+      const kategori = document.getElementById('projeKategori').value.trim();
+      if(adi && aciklama && gorsel && kategori) {
+        projeler.push({ adi, aciklama, gorsel, kategori });
+        renderProjeTable();
+        this.reset();
+      }
+    });
+    renderProjeTable();
+  </script>
+</body>
+</html> 

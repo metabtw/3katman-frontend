@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hizmet Yönetimi | 3Katman Digital Admin</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <!--#include file="components/sidebar.html" -->
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <!-- Navbar -->
+      <nav class="admin-navbar" style="width:100%;background:var(--primary);padding:1rem 3rem;display:flex;gap:2rem;align-items:center;">
+        <a href="hizmetler.html" class="admin-nav-link" id="nav-hizmetler">Hizmetler</a>
+        <a href="portfolyo.html" class="admin-nav-link" id="nav-portfolyo">Portfolyo</a>
+        <a href="iletisim.html" class="admin-nav-link" id="nav-iletisim">İletişim Mesajları</a>
+      </nav>
+      <style>
+        .admin-navbar {
+          border-radius: 1.2rem 1.2rem 0 0;
+          margin-bottom: 0.5rem;
+        }
+        .admin-nav-link {
+          color: #fff;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 1.08rem;
+          padding: 0.5rem 1.2rem;
+          border-radius: 8px;
+          transition: background 0.2s;
+          letter-spacing: 0.01em;
+        }
+        .admin-nav-link.active, .admin-nav-link:hover {
+          background: var(--accent);
+          color: #fff;
+        }
+        @media (max-width: 600px) {
+          .admin-navbar {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.5rem 0.5rem;
+          }
+          .admin-nav-link {
+            width: 100%;
+            text-align: center;
+          }
+        }
+      </style>
+      <script>
+        // Aktif sayfa vurgusu
+        const path = window.location.pathname;
+        if(path.includes('hizmetler')) document.getElementById('nav-hizmetler').classList.add('active');
+        if(path.includes('portfolyo')) document.getElementById('nav-portfolyo').classList.add('active');
+        if(path.includes('iletisim')) document.getElementById('nav-iletisim').classList.add('active');
+      </script>
+      <!-- Header -->
+      <!--#include file="components/header.html" -->
+      <main class="admin-main">
+        <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:2rem;">Hizmetler</h1>
+        <!-- Hizmet Listesi Tablosu -->
+        <table class="table" id="hizmetTable">
+          <thead>
+            <tr>
+              <th>Başlık</th>
+              <th>Açıklama</th>
+              <th>Kategori</th>
+              <th>İkon</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dummy veri ile doldurulacak -->
+          </tbody>
+        </table>
+        <!-- Yeni Hizmet Ekleme Formu -->
+        <form id="hizmetForm" style="margin-top:2rem;max-width:500px;">
+          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Yeni Hizmet Ekle</h2>
+          <input type="text" id="hizmetBaslik" placeholder="Başlık" required />
+          <textarea id="hizmetAciklama" placeholder="Açıklama" required></textarea>
+          <input type="text" id="hizmetKategori" placeholder="Kategori" required />
+          <input type="text" id="hizmetIkon" placeholder="İkon (örn: 🚀)" />
+          <button type="submit">Ekle</button>
+        </form>
+      </main>
+    </div>
+  </div>
+  <script>
+    // Dummy hizmet verisi
+    let hizmetler = [
+      { baslik: "Web Sitesi", aciklama: "Kurumsal ve modern web sitesi geliştirme.", kategori: "Yazılım", ikon: "💻" },
+      { baslik: "Mobil Uygulama", aciklama: "iOS ve Android için uygulama.", kategori: "Mobil", ikon: "📱" },
+      { baslik: "SEO Optimizasyonu", aciklama: "Arama motoru dostu çözümler.", kategori: "Dijital", ikon: "🚀" }
+    ];
+    function renderTable() {
+      const tbody = document.querySelector('#hizmetTable tbody');
+      tbody.innerHTML = '';
+      hizmetler.forEach((hizmet, i) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <span style="font-weight:600;">${hizmet.baslik}</span>
+            </td>
+            <td>${hizmet.aciklama}</td>
+            <td>${hizmet.kategori}</td>
+            <td style="font-size:1.5rem;text-align:center;">${hizmet.ikon || ''}</td>
+            <td>
+              <button onclick="editHizmet(${i})" style="background:var(--accent);margin-right:0.5rem;">Düzenle</button>
+              <button onclick="deleteHizmet(${i})" style="background:#e53935;">Sil</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+    function deleteHizmet(i) {
+      if(confirm('Bu hizmet silinsin mi?')) {
+        hizmetler.splice(i, 1);
+        renderTable();
+      }
+    }
+    function editHizmet(i) {
+      // Basit edit: formu doldur ve sil+ekle yap
+      const h = hizmetler[i];
+      document.getElementById('hizmetBaslik').value = h.baslik;
+      document.getElementById('hizmetAciklama').value = h.aciklama;
+      document.getElementById('hizmetKategori').value = h.kategori;
+      document.getElementById('hizmetIkon').value = h.ikon;
+      hizmetler.splice(i, 1);
+      renderTable();
+    }
+    document.getElementById('hizmetForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const baslik = document.getElementById('hizmetBaslik').value.trim();
+      const aciklama = document.getElementById('hizmetAciklama').value.trim();
+      const kategori = document.getElementById('hizmetKategori').value.trim();
+      const ikon = document.getElementById('hizmetIkon').value.trim();
+      if(baslik && aciklama && kategori) {
+        hizmetler.push({ baslik, aciklama, kategori, ikon });
+        renderTable();
+        this.reset();
+      }
+    });
+    renderTable();
+  </script>
+</body>
+</html> 

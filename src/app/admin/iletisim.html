@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İletişim Mesajları | 3Katman Digital Admin</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #29565244;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #29565222;
+      padding: 2rem 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      animation: fadeIn 0.2s;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <!--#include file="components/sidebar.html" -->
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <!-- Navbar -->
+      <nav class="admin-navbar" style="width:100%;background:var(--primary);padding:0.5rem 2rem;display:flex;gap:2rem;align-items:center;">
+        <a href="hizmetler.html" class="admin-nav-link" id="nav-hizmetler">Hizmetler</a>
+        <a href="portfolyo.html" class="admin-nav-link" id="nav-portfolyo">Portfolyo</a>
+        <a href="iletisim.html" class="admin-nav-link" id="nav-iletisim">İletişim Mesajları</a>
+      </nav>
+      <style>
+        .admin-navbar {
+          border-radius: 1.2rem 1.2rem 0 0;
+          margin-bottom: 0.5rem;
+        }
+        .admin-nav-link {
+          color: #fff;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 1.08rem;
+          padding: 0.5rem 1.2rem;
+          border-radius: 8px;
+          transition: background 0.2s;
+          letter-spacing: 0.01em;
+        }
+        .admin-nav-link.active, .admin-nav-link:hover {
+          background: var(--accent);
+          color: #fff;
+        }
+        @media (max-width: 600px) {
+          .admin-navbar {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.5rem 0.5rem;
+          }
+          .admin-nav-link {
+            width: 100%;
+            text-align: center;
+          }
+        }
+      </style>
+      <script>
+        // Aktif sayfa vurgusu
+        const path = window.location.pathname;
+        if(path.includes('hizmetler')) document.getElementById('nav-hizmetler').classList.add('active');
+        if(path.includes('portfolyo')) document.getElementById('nav-portfolyo').classList.add('active');
+        if(path.includes('iletisim')) document.getElementById('nav-iletisim').classList.add('active');
+      </script>
+      <!-- Header -->
+      <!--#include file="components/header.html" -->
+      <main class="admin-main">
+        <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:2rem;">İletişim Mesajları</h1>
+        <table class="table" id="mesajTable">
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>E-posta</th>
+              <th>Mesaj</th>
+              <th>Tarih</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dummy veri ile doldurulacak -->
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div id="modalBg" class="modal-bg" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Mesaj Detayı</h2>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  <script>
+    // Dummy mesaj verisi
+    let mesajlar = [
+      { ad: "Ahmet Yılmaz", email: "ahmet@mail.com", mesaj: "Merhaba, web sitesi yaptırmak istiyorum.", tarih: "2024-06-01 14:23" },
+      { ad: "Elif Demir", email: "elif@mail.com", mesaj: "Mobil uygulama hakkında bilgi alabilir miyim?", tarih: "2024-06-02 09:15" },
+      { ad: "Mehmet Kaya", email: "mehmet@mail.com", mesaj: "SEO hizmetiniz var mı?", tarih: "2024-06-03 17:40" }
+    ];
+    function renderMesajTable() {
+      const tbody = document.querySelector('#mesajTable tbody');
+      tbody.innerHTML = '';
+      mesajlar.forEach((mesaj, i) => {
+        tbody.innerHTML += `
+          <tr>
+            <td><span style="font-weight:600;">${mesaj.ad}</span></td>
+            <td>${mesaj.email}</td>
+            <td>${mesaj.mesaj.length > 30 ? mesaj.mesaj.slice(0,30)+'...' : mesaj.mesaj}</td>
+            <td>${mesaj.tarih}</td>
+            <td>
+              <button onclick="showModal(${i})" style="background:var(--accent);margin-right:0.5rem;">Detay</button>
+              <button onclick="deleteMesaj(${i})" style="background:#e53935;">Sil</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+    function showModal(i) {
+      const m = mesajlar[i];
+      document.getElementById('modalContent').innerHTML = `
+        <div><b>Ad Soyad:</b> ${m.ad}</div>
+        <div><b>E-posta:</b> ${m.email}</div>
+        <div style="margin:1rem 0;"><b>Mesaj:</b><br>${m.mesaj}</div>
+        <div><b>Gönderim Tarihi:</b> ${m.tarih}</div>
+      `;
+      document.getElementById('modalBg').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('modalBg').style.display = 'none';
+    }
+    function deleteMesaj(i) {
+      if(confirm('Bu mesaj silinsin mi?')) {
+        mesajlar.splice(i, 1);
+        renderMesajTable();
+        closeModal();
+      }
+    }
+    renderMesajTable();
+  </script>
+</body>
+</html> 
