@@ -77,7 +77,7 @@ export default function Iletisim() {
               placeholder="Ad Soyad*"
               value={form.ad}
               onChange={handleChange}
-              className="border border-[#abf0d6] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652]"
+              className="border-2 border-[#38b97e] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652] text-[#295652] font-medium"
               required
             />
             <input
@@ -86,7 +86,7 @@ export default function Iletisim() {
               placeholder="E-posta*"
               value={form.email}
               onChange={handleChange}
-              className="border border-[#abf0d6] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652]"
+              className="border-2 border-[#38b97e] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652] text-[#295652] font-medium"
               required
             />
             <input
@@ -95,13 +95,13 @@ export default function Iletisim() {
               placeholder="Telefon (isteğe bağlı)"
               value={form.telefon}
               onChange={handleChange}
-              className="border border-[#abf0d6] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652]"
+              className="border-2 border-[#38b97e] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652] text-[#295652] font-medium"
             />
             <select
               name="konu"
               value={form.konu}
               onChange={handleChange}
-              className="border border-[#abf0d6] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#38b97e] text-[#295652]"
+              className="border-2 border-[#38b97e] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#38b97e] text-[#295652] font-medium"
             >
               <option value="" disabled hidden>Konu Seçiniz*</option>
               {konular.map((k, i) => (
@@ -113,7 +113,7 @@ export default function Iletisim() {
               placeholder="Mesajınız*"
               value={form.mesaj}
               onChange={handleChange}
-              className="border border-[#abf0d6] rounded-lg px-4 py-2 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652]"
+              className="border-2 border-[#38b97e] rounded-lg px-4 py-3 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-[#38b97e] placeholder:text-[#295652] text-[#295652] font-medium"
               required
             />
             {hata && <div className="text-red-600 text-sm">{hata}</div>}
@@ -147,14 +147,32 @@ export default function Iletisim() {
                 </div>
               ))}
             </div>
-            <a
-              href="https://wa.me/905xxxxxxxxx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#38b97e] text-white rounded-full shadow-md hover:bg-[#295652] transition-all duration-300 w-max"
-            >
-              <span className="text-xl">💬</span> WhatsApp'tan Yaz
-            </a>
+            <div className="flex flex-col gap-3 mt-6">
+              <a
+                href="https://wa.me/905xxxxxxxxx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#38b97e] text-white rounded-full shadow-md hover:bg-[#295652] transition-all duration-300 w-full"
+              >
+                <span className="text-xl">💬</span> WhatsApp'tan Yaz
+              </a>
+              <a
+                href="https://instagram.com/3katman"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#E1306C] text-white rounded-full shadow-md hover:bg-[#C13584] transition-all duration-300 w-full"
+              >
+                <span className="text-xl">📸</span> Instagram
+              </a>
+              <a
+                href="https://linkedin.com/company/3katman"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0077B5] text-white rounded-full shadow-md hover:bg-[#005582] transition-all duration-300 w-full"
+              >
+                <span className="text-xl">💼</span> LinkedIn
+              </a>
+            </div>
           </div>
         </div>
       </div>
