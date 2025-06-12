@@ -1,183 +1,348 @@
 'use client';
-import React, { useState } from 'react';
-import { getPortfolio } from '@/lib/api';
+import React, { useState, useEffect } from 'react';
+import { getProjects, addProject, deleteProject, updateProject, getCategories, Category, Project } from '@/lib/api';
 import AdminNavbar from '../../../../components/AdminNavbar';
 
-interface Project {
-  id: number;
+// Proje ekleme/düzenleme formu için veri arayüzü
+interface ProjectFormData {
   title: string;
   description: string;
   imageUrl: string;
-  category: string;
+  categoryId: string; // Kategori ID'si olarak güncellendi
 }
 
-export default function AdminPortfolyoPage() {
+const AdminPortfolyoPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const [newProject, setNewProject] = useState({
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
     description: '',
     imageUrl: '',
-    category: '',
+    categoryId: '',
   });
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  // Verileri çekme fonksiyonu
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [projectsData, categoriesData] = await Promise.all([
+        getProjects(),
+        getCategories()
+      ]);
+      setProjects(projectsData);
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error('Veriler çekilirken hata oluştu:', error);
+      setError('Veriler yüklenirken bir hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Formu sıfırla
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      imageUrl: '',
+      categoryId: '',
+    });
+    setEditingProject(null);
+    setError(null);
+  };
+
+  // Proje ekle
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
-    // API çağrısı yapılacak
-    setIsAdding(false);
-    setNewProject({ title: '', description: '', imageUrl: '', category: '' });
+    setError(null);
+
+    if (!formData.title?.trim() || !formData.description?.trim() || !formData.categoryId?.trim()) {
+      setError('Lütfen tüm zorunlu alanları doldurun (Başlık, Açıklama ve Kategori).');
+      return;
+    }
+
+    try {
+      const projectData = {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        CategoryID: formData.categoryId.trim(), // Backend'in beklediği Guid formatında ID
+      };
+
+      console.log('Gönderilen veri:', projectData);
+      const response = await addProject(projectData);
+      console.log('API yanıtı:', response);
+
+      resetForm();
+      fetchData();
+    } catch (err: any) {
+      console.error('Tam hata detayı:', err.response?.data);
+      let errorMessage = 'Proje eklenirken bir hata oluştu.';
+      if (err.response?.data?.errors) {
+        const validationErrors = Object.entries(err.response.data.errors)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('\n');
+        errorMessage = `Validasyon hataları:\n${validationErrors}`;
+      } else if (err.response?.data) {
+        errorMessage = `API Hatası: ${JSON.stringify(err.response.data)}`;
+      } else if (err.message) {
+        errorMessage = `Hata: ${err.message}`;
+      }
+      setError(errorMessage);
+    }
+  };
+
+  // Proje düzenle
+  const handleEditProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProject) return;
+    
+    setError(null);
+    try {
+      // Veri doğrulama
+      if (!formData.title?.trim() || !formData.description?.trim() || !formData.categoryId?.trim()) {
+        setError('Lütfen tüm zorunlu alanları doldurun (Başlık, Açıklama ve Kategori).');
+        return;
+      }
+
+      // API'nin beklediği veri yapısı
+      const projectData = {
+        id: editingProject.id,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        CategoryID: formData.categoryId.trim(), // Backend'in beklediği Guid formatında ID
+      };
+
+      console.log('Gönderilen veri:', projectData);
+      
+      // API çağrısı
+      const response = await updateProject(editingProject.id, projectData);
+      console.log('API yanıtı:', response);
+
+      // Başarılı güncelleme
+      resetForm();
+      fetchData();
+    } catch (err: any) {
+      console.error('Tam hata detayı:', err.response?.data);
+      
+      // Hata mesajını belirle
+      let errorMessage = 'Proje güncellenirken bir hata oluştu.';
+      
+      if (err.response?.data?.errors) {
+        const validationErrors = Object.entries(err.response.data.errors)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('\n');
+        errorMessage = `Validasyon hataları:\n${validationErrors}`;
+      } else if (err.response?.data) {
+        errorMessage = `API Hatası: ${JSON.stringify(err.response.data)}`;
+      } else if (err.message) {
+        errorMessage = `Hata: ${err.message}`;
+      }
+      
+      setError(errorMessage);
+    }
+  };
+
+  // Düzenleme modunu başlat
+  const startEditing = (project: Project) => {
+    setEditingProject(project);
+    setFormData({
+      title: project.title || '',
+      description: project.description || '',
+      imageUrl: '', // Images backend Project modelinde JsonIgnore olduğu için doğrudan Project objesinden gelmiyor. Boş başlatıyoruz.
+      categoryId: project.CategoryID || '', // CategoryID kullanıyoruz
+    });
+  };
+
+  // Form değişikliklerini yönet
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [name]: value || ''
+      };
+      console.log('Form verisi güncellendi:', newData);
+      return newData;
+    });
+  };
+
+  // Proje sil
+  const handleDeleteProject = async (id: string) => {
+    if (window.confirm('Bu projeyi silmek istediğinizden emin misiniz?')) {
+      try {
+        await deleteProject(id);
+        fetchData();
+      } catch (error) {
+        console.error('Proje silinirken hata oluştu:', error);
+        setError('Proje silinirken bir hata oluştu.');
+      }
+    }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
       <AdminNavbar />
-      <main className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-[#1a2a2a]">Portfolyo</h1>
-            <button
-              onClick={() => setIsAdding(true)}
-              className="bg-[#38b97e] text-white px-4 py-2 rounded-lg hover:bg-[#2d9c6a] transition"
-            >
-              Yeni Proje Ekle
-            </button>
-          </div>
+      <div className="container mx-auto p-6 flex-grow">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Portfolyo Yönetimi</h1>
 
-          {/* Yeni Proje Formu */}
-          {isAdding && (
-            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4 text-[#1a2a2a]">Yeni Proje Ekle</h2>
-              <form onSubmit={handleAddProject} className="space-y-4">
-                <div>
-                  <label className="block text-gray-900 mb-2">Başlık</label>
-                  <input
-                    type="text"
-                    value={newProject.title}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, title: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-900 mb-2">Açıklama</label>
-                  <textarea
-                    value={newProject.description}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, description: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
-                    rows={3}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-900 mb-2">Görsel URL</label>
-                  <input
-                    type="text"
-                    value={newProject.imageUrl}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, imageUrl: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-900 mb-2">Kategori</label>
-                  <select
-                    value={newProject.category}
-                    onChange={(e) =>
-                      setNewProject({ ...newProject, category: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
-                    required
-                  >
-                    <option value="">Kategori Seçin</option>
-                    <option value="Web Geliştirme">Web Geliştirme</option>
-                    <option value="Mobil Uygulama">Mobil Uygulama</option>
-                    <option value="Web Tasarım">Web Tasarım</option>
-                    <option value="Dijital Pazarlama">Dijital Pazarlama</option>
-                  </select>
-                </div>
-                <div className="flex justify-end space-x-4">
-                  <button
-                    type="button"
-                    onClick={() => setIsAdding(false)}
-                    className="px-4 py-2 border rounded-lg hover:bg-gray-50 text-gray-700"
-                  >
-                    İptal
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-[#38b97e] text-white px-4 py-2 rounded-lg hover:bg-[#2d9c6a]"
-                  >
-                    Kaydet
-                  </button>
-                </div>
-              </form>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong className="font-bold">Hata!</strong>
+            <span className="block sm:inline"> {error}</span>
+          </div>
+        )}
+
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">{editingProject ? 'Proje Düzenle' : 'Yeni Proje Ekle'}</h2>
+          <form onSubmit={editingProject ? handleEditProject : handleAddProject}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mb-4">
+                <label className="block text-gray-900 mb-2">Başlık *</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleFormChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
+                  placeholder="Proje Başlığı"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-900 mb-2">Açıklama *</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleFormChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
+                  rows={4}
+                  placeholder="Proje Açıklaması"
+                  required
+                ></textarea>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-900 mb-2">Kategori *</label>
+                <select
+                  name="categoryId"
+                  value={formData.categoryId}
+                  onChange={handleFormChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
+                  required
+                >
+                  <option value="">Kategori Seçiniz</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          )}
 
-          {/* Projeler Listesi */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    Görsel
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    Başlık
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    Kategori
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    Açıklama
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    İşlemler
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {projects.map((project) => (
-                  <tr key={project.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <img
-                        src={project.imageUrl}
-                        alt={project.title}
-                        className="h-12 w-12 object-cover rounded"
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-[#1a2a2a]">
-                      {project.title}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">
-                      {project.category}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-700">
-                        {project.description}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-[#38b97e] hover:text-[#2d9c6a] mr-4">
-                        Düzenle
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
-                        Sil
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            <div className="mb-4">
+              <label className="block text-gray-900 mb-2">Görsel URL (Opsiyonel)</label>
+              <input
+                type="url"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleFormChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38b97e]"
+                placeholder="https://drive.google.com/file/d/..."
+                pattern="https?://.*"
+                title="Geçerli bir URL giriniz (http:// veya https:// ile başlamalı)"
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                Google Drive linkini yapıştırın. Link formatı: https://drive.google.com/file/d/[FILE_ID]/view?usp=sharing
+                Not: Google Drive dosyasının "Herkes erişebilir" olarak ayarlandığından emin olun.
+                Boş bırakırsanız varsayılan bir görsel kullanılacaktır.
+              </p>
+            </div>
+
+            <div className="flex justify-end space-x-4">
+              <button
+                type="submit"
+                className="bg-[#38b97e] text-white px-6 py-3 rounded-lg hover:bg-[#2fa06a] focus:outline-none focus:ring-2 focus:ring-[#38b97e] focus:ring-opacity-50 transition duration-300"
+              >
+                {editingProject ? 'Değişiklikleri Kaydet' : 'Proje Ekle'}
+              </button>
+              {editingProject && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300"
+                >
+                  İptal
+                </button>
+              )}
+            </div>
+          </form>
         </div>
-      </main>
-    </>
+
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Mevcut Projeler</h2>
+        {loading ? (
+          <p>Projeler yükleniyor...</p>
+        ) : (
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            {projects.length === 0 ? (
+              <p>Henüz hiç proje yok.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Başlık</th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Açıklama</th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Kategori</th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Görsel</th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.map((project) => (
+                      <tr key={project.id} className="hover:bg-gray-50">
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">{project.title}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900 line-clamp-2 max-w-xs">{project.description}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
+                          {categories.find(cat => cat.id === project.CategoryID)?.name || 'Bilinmiyor'}
+                        </td>
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
+                          {/* Backend Project modelinde Images alanı JsonIgnore olduğu için doğrudan Project objesinden gelmez.
+                              Bu nedenle görseli görüntülemek için bir Placeholder veya başka bir mekanizma gerekebilir.
+                              Şimdilik boş bırakıyoruz veya varsayılan bir görsel gösteriyoruz. */}
+                          <span>Görsel Yönetimi Ayrı</span>
+                        </td>
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
+                          <button
+                            onClick={() => startEditing(project)}
+                            className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600 mr-2"
+                          >
+                            Düzenle
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProject(project.id)}
+                            className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600"
+                          >
+                            Sil
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
-} 
+};
+
+export default AdminPortfolyoPage;

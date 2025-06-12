@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import AdminNavbar from '../../../components/AdminNavbar';
+import { getProjects, addProject, deleteProject } from '@/lib/api'; 
 
 export default function AdminDashboardPage() {
   return (

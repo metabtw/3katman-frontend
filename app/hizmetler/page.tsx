@@ -1,41 +1,34 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HizmetCard from '../../components/HizmetCard';
+import { getServices } from '@/lib/api';
 
-const hizmetler = [
-  {
-    title: 'Web Tasarım & Geliştirme',
-    description: 'Modern ve kullanıcı dostu web siteleri tasarlıyor ve geliştiriyoruz.',
-    icon: '🌐',
-  },
-  {
-    title: 'Mobil Uygulama Geliştirme',
-    description: 'iOS ve Android için native ve cross-platform mobil uygulamalar geliştiriyoruz.',
-    icon: '📱',
-  },
-  {
-    title: 'E-Ticaret Çözümleri',
-    description: 'Online satış platformları ve e-ticaret sistemleri kuruyoruz.',
-    icon: '🛍️',
-  },
-  {
-    title: 'SEO & Dijital Pazarlama',
-    description: 'Arama motoru optimizasyonu ve dijital pazarlama stratejileri ile işinizi büyütüyoruz.',
-    icon: '📈',
-  },
-  {
-    title: 'UI/UX Tasarım',
-    description: 'Kullanıcı odaklı arayüz ve deneyim tasarımları oluşturuyoruz.',
-    icon: '🎨',
-  },
-  {
-    title: 'Sosyal Medya Yönetimi',
-    description: 'Sosyal medya hesaplarınızı profesyonel şekilde yönetiyoruz.',
-    icon: '📱',
-  },
-];
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  icon: string;
+}
 
 export default function HizmetlerPage() {
+  const [hizmetler, setHizmetler] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHizmetler = async () => {
+      setLoading(true);
+      try {
+        const res = await getServices();
+        setHizmetler(res as Service[]);
+      } catch {
+        setHizmetler([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHizmetler();
+  }, []);
+
   return (
     <main className="min-h-screen py-10 bg-gradient-to-b from-[#f8fdfa] to-white">
       <div className="container mx-auto px-4">
@@ -45,14 +38,18 @@ export default function HizmetlerPage() {
           <a href="/iletisim" className="inline-block px-8 py-3 bg-[#38b97e] text-white rounded-full font-semibold shadow hover:bg-[#295652] transition-all duration-300 text-base">Hemen Teklif Al</a>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {hizmetler.map((hizmet, index) => (
+          {loading ? (
+            <div>Yükleniyor...</div>
+          ) : (
+            hizmetler.map((hizmet, index) => (
             <HizmetCard
-              key={index}
+                key={hizmet.id || index}
               title={hizmet.title}
               description={hizmet.description}
               icon={hizmet.icon}
             />
-          ))}
+            ))
+          )}
         </div>
         <div className="text-center mt-8">
           <p className="text-lg text-gray-700 mb-4">Hizmetlerimiz hakkında daha fazla bilgi almak veya özel bir çözüm için bize ulaşın.</p>

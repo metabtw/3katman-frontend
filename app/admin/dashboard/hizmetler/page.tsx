@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getServices, addService, deleteService } from '@/lib/api';
+import { getServices, addService, deleteService, updateService } from '@/lib/api';
 import AdminNavbar from '../../../../components/AdminNavbar';
 
 interface Service {
@@ -17,16 +17,18 @@ export default function AdminHizmetlerPage() {
   const [newService, setNewService] = useState({ title: '', description: '', icon: '' });
   const [editService, setEditService] = useState({ id: 0, title: '', description: '', icon: '' });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   // API'den hizmetleri çek
-  const fetchServices = () => {
+  const fetchServices = async () => {
     setLoading(true);
-    getServices()
-      .then(setServices)
-      .catch(() => setError('Hizmetler yüklenemedi.'))
-      .finally(() => setLoading(false));
+    try {
+      const res = await getServices();
+      setServices(res as Service[]);
+    } catch {
+      // error handling
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     fetchServices();
@@ -36,16 +38,13 @@ export default function AdminHizmetlerPage() {
   const handleAddService = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       await addService(newService);
-      setSuccess('Hizmet başarıyla eklendi.');
       setIsAdding(false);
       setNewService({ title: '', description: '', icon: '' });
       fetchServices();
     } catch {
-      setError('Hizmet eklenemedi.');
+      // error handling
     }
     setLoading(false);
   };
@@ -54,14 +53,11 @@ export default function AdminHizmetlerPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Bu hizmeti silmek istediğinize emin misiniz?')) return;
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       await deleteService(id);
-      setSuccess('Hizmet silindi.');
       fetchServices();
     } catch {
-      setError('Hizmet silinemedi.');
+      // error handling
     }
     setLoading(false);
   };
@@ -76,16 +72,12 @@ export default function AdminHizmetlerPage() {
   const handleEditService = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
-      // API'de update fonksiyonu yoksa burada PATCH/PUT işlemi eklenmeli
-      // await updateService(editService.id, editService);
-      setSuccess('Hizmet güncellendi (demo).');
+      await updateService(editService.id, editService);
       setIsEditing(null);
       fetchServices();
     } catch {
-      setError('Hizmet güncellenemedi.');
+      // error handling
     }
     setLoading(false);
   };
@@ -105,8 +97,6 @@ export default function AdminHizmetlerPage() {
             </button>
           </div>
           {loading && <div className="mb-4 text-[#38b97e]">Yükleniyor...</div>}
-          {error && <div className="mb-4 text-red-600">{error}</div>}
-          {success && <div className="mb-4 text-green-600">{success}</div>}
           {/* Yeni Hizmet Formu */}
           {isAdding && (
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">

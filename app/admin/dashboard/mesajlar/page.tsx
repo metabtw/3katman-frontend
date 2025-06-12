@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../../../../components/AdminNavbar';
+import { getMessages, deleteMessage, updateMessage } from '@/lib/api';
 
 interface Message {
   id: number;
@@ -15,20 +16,42 @@ export default function AdminMesajlarPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
+  // Mesajları API'den çek
+  const fetchMessages = async () => {
+    try {
+      const res = await getMessages();
+      setMessages(res as Message[]);
+    } catch {
+      // Mesajlar yüklenemedi
+    }
+  };
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  // Mesajı okundu olarak işaretle
   const handleMarkAsRead = async (messageId: number) => {
-    // API çağrısı yapılacak
-    setMessages(
-      messages.map((msg) =>
-        msg.id === messageId ? { ...msg, isRead: true } : msg
-      )
-    );
+    try {
+      const msg = messages.find((m) => m.id === messageId);
+      if (msg) {
+        await updateMessage(messageId, { ...msg, isRead: true });
+        fetchMessages();
+      }
+    } catch {
+      // Mesaj güncellenemedi
+    }
   };
 
+  // Mesaj sil
   const handleDelete = async (messageId: number) => {
-    // API çağrısı yapılacak
-    setMessages(messages.filter((msg) => msg.id !== messageId));
+    try {
+      await deleteMessage(messageId);
+      fetchMessages();
     if (selectedMessage?.id === messageId) {
       setSelectedMessage(null);
+      }
+    } catch {
+      // Mesaj silinemedi
     }
   };
 
