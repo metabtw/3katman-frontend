@@ -1,13 +1,13 @@
 # 3KATMAN-FRONTEND
 
 <p align="center">
-  <a href="https://github.com/3Katman/3katman-frontend/stargazers">
+  <a href="https://github.com/metabtw/3katman-frontend/stargazers">
     <img src="https://img.shields.io/github/stars/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Stars"/>
   </a>
-  <a href="https://github.com/3Katman/3katman-frontend/network/members">
+  <a href="https://github.com/metabtw/3katman-frontend/network/members">
     <img src="https://img.shields.io/github/forks/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Forks"/>
   </a>
-  <a href="https://github.com/3Katman/3katman-frontend/blob/main/LICENSE">
+  <a href="https://github.com/metabtw/3katman-frontend/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/3Katman/3katman-frontend?style=for-the-badge" alt="License"/>
   </a>
   <a href="#">
