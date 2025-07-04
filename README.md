@@ -2,13 +2,13 @@
 
 <p align="center">
   <a href="https://github.com/metabtw/3katman-frontend/stargazers">
-    <img src="https://img.shields.io/github/stars/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Stars"/>
+    <img src="https://img.shields.io/github/stars/metabtw/3katman-frontend?style=for-the-badge" alt="GitHub Stars"/>
   </a>
   <a href="https://github.com/metabtw/3katman-frontend/network/members">
-    <img src="https://img.shields.io/github/forks/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Forks"/>
+    <img src="https://img.shields.io/github/forks/metabtw/3katman-frontend?style=for-the-badge" alt="GitHub Forks"/>
   </a>
   <a href="https://github.com/metabtw/3katman-frontend/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/3Katman/3katman-frontend?style=for-the-badge" alt="License"/>
+    <img src="https://img.shields.io/github/license/metabtw/3katman-frontend?style=for-the-badge" alt="License"/>
   </a>
   <a href="#">
     <img src="https://img.shields.io/badge/build-passing-green?style=for-the-badge" alt="Build Passing"/>
