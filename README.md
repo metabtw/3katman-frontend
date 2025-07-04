@@ -1,4 +1,4 @@
-# 3KATMAN-FRONTEND
+# 3KATMAN PROJESİ – FULLSTACK (Frontend + Backend)
 
 <p align="center">
   <a href="https://github.com/metabtw/3katman-frontend/stargazers">
@@ -15,102 +15,129 @@
   </a>
 </p>
 
-## Kullanılan Teknolojiler (Tech Stack)
+---
+
+## 🔧 Kullanılan Teknolojiler (Tech Stack)
+
+### 🌐 Frontend
 
 <p align="left">
-  <a href="https://nextjs.org/" target="_blank">
-    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js"/>
-  </a>
-  <a href="https://reactjs.org/" target="_blank">
-    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
-  </a>
-  <a href="https://redux-toolkit.js.org/" target="_blank">
-    <img src="https://img.shields.io/badge/Redux_Toolkit-593D88?style=for-the-badge&logo=redux&logoColor=white" alt="Redux Toolkit"/>
-  </a>
-  <a href="https://www.typescriptlang.org/" target="_blank">
-    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
-  </a>
-  <a href="https://sass-lang.com/" target="_blank">
-    <img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white" alt="Sass"/>
-  </a>
+  <a href="https://nextjs.org/" target="_blank"><img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js"/></a>
+  <a href="https://reactjs.org/" target="_blank"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/></a>
+  <a href="https://redux-toolkit.js.org/" target="_blank"><img src="https://img.shields.io/badge/Redux_Toolkit-593D88?style=for-the-badge&logo=redux&logoColor=white" alt="Redux Toolkit"/></a>
+  <a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/></a>
+  <a href="https://sass-lang.com/" target="_blank"><img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white" alt="Sass"/></a>
 </p>
 
-## Table of Contents
+### 💾 Backend
 
-- [Overview](#overview)
-- [Why follow us on social?](#why-follow-us-on-social)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Testing](#testing)
+<p align="left">
+  <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET" />
+  <img src="https://img.shields.io/badge/ASP.NET_Core-512BD4?style=for-the-badge&logo=.net&logoColor=white" alt="ASP.NET Core"/>
+  <img src="https://img.shields.io/badge/Entity_Framework_Core-6DB33F?style=for-the-badge&logo=entity-framework&logoColor=white" alt="EF Core"/>
+  <img src="https://img.shields.io/badge/SQL_Server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" alt="SQL Server"/>
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger"/>
+</p>
 
-## Overview
+---
 
-3Katman-Frontend is a project created with the Next.js framework, written in the TypeScript language. It aims to provide a fast and secure experience. It also serves as the project of our preparations to participate in Teknofest. By following us on our social media accounts, you can be informed about our progress and support us.
+## 📑 İçindekiler (Table of Contents)
 
-## Why follow us on social?
+- [Proje Tanımı](#proje-tanımı)
+- [Frontend Kurulum](#frontend-kurulum)
+- [Backend Kurulum](#backend-kurulum)
+- [Kullanım](#kullanım)
+- [API Endpoint Listesi](#api-endpoint-listesi)
+- [Test](#test)
 
-This project is supported by the technologies listed below, allowing it to offer a modern and powerful user experience.
+---
 
--   ⚛️ **React & Next.js:** For fast and SEO-friendly user interfaces.
--   🔄 **Redux & Redux Toolkit:** For effective state management.
--   🎨 **Sass/SCSS:** For writing modular and scalable CSS.
--   🔒 **TypeScript:** To add static types to JavaScript and catch errors.
--   ✨ **Reusable Components, Custom Hooks, Helper Functions:** Provides reusable code blocks, custom hooks for managing logic, and helper functions to speed up development.
--   🚀 **State Management, Modern UI, Performance:** Uses modern state management methods, has a modern user interface, and is performance-oriented.
--   📂 **Directory Structure, Project Management, Atomic Design:** The project has a clean and understandable directory structure. It is managed with project management tools and developed with the atomic design principle.
+## 📌 Proje Tanımı
 
-## Getting Started
+**3Katman**; modern web teknolojileriyle hazırlanmış, kurumsal düzeyde bir proje vitrin ve iletişim platformudur. Teknofest sürecinde geliştirilen bu proje, kurumsal kimlik sunumu ve iletişim taleplerini API aracılığıyla yönetmeyi amaçlar.
 
-### Prerequisites
+---
 
--   Node.js v16 or higher
--   Preferred package manager `npm` or `yarn`
+## 🚀 Frontend Kurulum
 
-### Installation
+### Gereksinimler
 
-1.  Clone the repository:
-    ```sh
-    git clone [https://github.com/3Katman/3katman-frontend.git](https://github.com/3Katman/3katman-frontend.git)
-    ```
-2.  Navigate to the project directory:
-    ```sh
-    cd 3katman-frontend
-    ```
-3.  Install dependencies:
-    ```sh
-    npm install
-    ```
-    or
-    ```sh
-    yarn install
-    ```
+- Node.js v16+
+- npm veya yarn
 
-## Usage
+### Adımlar
 
-To start the development server, run the following command:
+```bash
+# 1. Repo'yu klonla
+git clone https://github.com/metabtw/3katman-frontend.git
 
-```sh
+# 2. Dizine gir
+cd 3katman-frontend
+
+# 3. Bağımlılıkları yükle
+npm install
+# veya
+yarn install
+
+# 4. Geliştirme sunucusunu başlat
 npm run dev
-```
-
-or
-
-```sh
+# veya
 yarn dev
-```
 
-## Testing
+⚙️ Backend Kurulum
+Gereksinimler
+.NET 7 SDK
 
-The project includes unit tests using the Jest & Testing Library framework. You can run the tests with the command below.
+SQL Server
 
-```sh
+Adımlar
+
+# 1. Backend dizinine geç
+cd 3KatmanDigital_API
+
+# 2. NuGet paketlerini yükle
+dotnet restore
+
+# 3. Veritabanı migrasyonu yap
+dotnet ef database update
+
+# 4. API'yi başlat
+dotnet run
+Swagger Arayüzü
+Projeyi çalıştırdıktan sonra https://localhost:5001/swagger (veya port numaranıza göre) adresinde tüm API uçlarını test edebilirsiniz.
+
+🔄 Kullanım
+Frontend üzerinden iletişim formu doldurulduğunda, bilgiler aşağıdaki formatta backend API’ye gönderilir:
+
+json
+{
+  "nameSurname": "Muhammed Emin",
+  "email": "ornek@example.com",
+  "phone": "05301234567",
+  "message": "Proje hakkında bilgi almak istiyorum.",
+  "categoryID": "45CD5629-8784-4D78-900D-E0B01728E7C1",
+  "isActive": true,
+  "createdTime": "2025-07-04T10:00:00.000Z",
+  "updatedTime": "2025-07-04T10:00:00.000Z"
+}
+
+📡 API Endpoint Listesi
+Metot	Route	Açıklama
+
+GET	/api/ProjectRequest	Tüm proje isteklerini getirir
+GET	/api/ProjectRequest/{id}	Belirli bir proje isteğini getirir
+POST	/api/ProjectRequest	Yeni proje isteği oluşturur
+PUT	/api/ProjectRequest/{id}	Proje isteğini günceller
+DELETE	/api/ProjectRequest/{id}	Proje isteğini siler
+GET	/api/ProjectRequest/category/{id}	Belirli kategoriye ait istekleri getirir
+
+✅ Test
+Frontend Test
+Proje Jest ve Testing Library desteğiyle gelir:
+
 npm run test
-```
-
-or
-
-```sh
+# veya
 yarn test
-```
+Backend Test (Swagger Üzerinden)
+API uçlarını test etmek için Swagger UI arayüzünü kullanabilirsiniz:
+https://localhost:5001/swagger
