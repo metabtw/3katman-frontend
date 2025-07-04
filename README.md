@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3KATMAN-FRONTEND
+
+<p align="center">
+  <a href="https://github.com/3Katman/3katman-frontend/stargazers">
+    <img src="https://img.shields.io/github/stars/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Stars"/>
+  </a>
+  <a href="https://github.com/3Katman/3katman-frontend/network/members">
+    <img src="https://img.shields.io/github/forks/3Katman/3katman-frontend?style=for-the-badge" alt="GitHub Forks"/>
+  </a>
+  <a href="https://github.com/3Katman/3katman-frontend/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/3Katman/3katman-frontend?style=for-the-badge" alt="License"/>
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/build-passing-green?style=for-the-badge" alt="Build Passing"/>
+  </a>
+</p>
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Why follow us on social?](#why-follow-us-on-social)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
+
+## Overview
+
+3Katman-Frontend is a project created with the Next.js framework, written in the TypeScript language. It aims to provide a fast and secure experience. It also serves as the project of our preparations to participate in Teknofest. By following us on our social media accounts, you can be informed about our progress and support us.
+
+## Why follow us on social?
+
+This project is supported by the technologies listed below, allowing it to offer a modern and powerful user experience.
+
+-   ⚛️ **React & Next.js:** For fast and SEO-friendly user interfaces.
+-   🔄 **Redux & Redux Toolkit:** For effective state management.
+-   🎨 **Sass/SCSS:** For writing modular and scalable CSS.
+-   🔒 **TypeScript:** To add static types to JavaScript and catch errors.
+-   ✨ **Reusable Components, Custom Hooks, Helper Functions:** Provides reusable code blocks, custom hooks for managing logic, and helper functions to speed up development.
+-   🚀 **State Management, Modern UI, Performance:** Uses modern state management methods, has a modern user interface, and is performance-oriented.
+-   📂 **Directory Structure, Project Management, Atomic Design:** The project has a clean and understandable directory structure. It is managed with project management tools and developed with the atomic design principle.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
+-   Node.js v16 or higher
+-   Preferred package manager `npm` or `yarn`
+
+### Installation
+
+1.  Clone the repository:
+    ```sh
+    git clone [https://github.com/3Katman/3katman-frontend.git](https://github.com/3Katman/3katman-frontend.git)
+    ```
+2.  Navigate to the project directory:
+    ```sh
+    cd 3katman-frontend
+    ```
+3.  Install dependencies:
+    ```sh
+    npm install
+    ```
+    or
+    ```sh
+    yarn install
+    ```
+
+## Usage
+
+To start the development server, run the following command:
+
+```sh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+or
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Testing
 
-## Learn More
+The project includes unit tests using the Jest & Testing Library framework. You can run the tests with the command below.
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+or
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```sh
+yarn test
+```
